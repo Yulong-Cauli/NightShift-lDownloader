@@ -15,6 +15,24 @@ A time-window based intelligent download manager optimized for nighttime downloa
 
 ## 安装 (Installation)
 
+### 方式 1: 使用 pip 安装 (Option 1: Install with pip)
+
+```bash
+git clone https://github.com/Yulong-Cauli/NightShift-lDownloader.git
+cd NightShift-lDownloader
+pip install -e .
+```
+
+安装后可以使用 `nightshift` 命令：
+
+After installation, you can use the `nightshift` command:
+
+```bash
+nightshift --help
+```
+
+### 方式 2: 手动安装依赖 (Option 2: Manual installation)
+
 ### 1. 克隆仓库 (Clone the repository)
 
 ```bash
@@ -46,7 +64,53 @@ export TELEGRAM_PHONE="+1234567890"
 
 ## 使用方法 (Usage)
 
-### 快速开始 (Quick Start)
+### 命令行界面 (Command Line Interface)
+
+使用 `nightshift` 命令（如果已通过 pip 安装）或 `python3 cli.py`：
+
+Use the `nightshift` command (if installed via pip) or `python3 cli.py`:
+
+#### 添加任务 (Add tasks)
+
+```bash
+# 添加视频下载任务 (Add video download task)
+nightshift add-video "https://www.youtube.com/watch?v=example"
+nightshift add-video "https://x.com/user/status/123456789"
+
+# 添加 Telegram 视频任务 (Add Telegram video task)
+nightshift add-telegram "https://t.me/channel/123"
+
+# 添加库安装任务 (Add library installation task)
+nightshift add-install "pip install torch"
+
+# 在 Docker 容器中安装库 (Install library in Docker container)
+nightshift add-docker my_container "pip install requests"
+```
+
+#### 查看任务 (List tasks)
+
+```bash
+nightshift list
+```
+
+#### 启动下载管理器 (Start the download manager)
+
+```bash
+nightshift run
+```
+
+#### 自定义配置 (Custom configuration)
+
+```bash
+# 使用自定义任务文件和下载目录
+nightshift --tasks-file my_tasks.json --download-dir my_downloads run
+```
+
+### Python API
+
+也可以直接使用 Python API：
+
+You can also use the Python API directly:
 
 ```python
 from download_manager import DownloadManager, TaskType
