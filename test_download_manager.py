@@ -93,7 +93,8 @@ def test_task_management():
     
     # Test task status update
     manager.update_task_status(task_id_1, TaskStatus.COMPLETED)
-    assert manager.tasks[0]["status"] == TaskStatus.COMPLETED.value
+    task = next(t for t in manager.tasks if t['id'] == task_id_1)
+    assert task["status"] == TaskStatus.COMPLETED.value
     print(f"  ✓ Task status updated correctly")
     
     # Clean up

@@ -62,12 +62,12 @@ Examples:
     
     # Add library install command
     add_install_parser = subparsers.add_parser('add-install', help='Add a library installation task')
-    add_install_parser.add_argument('command', help='Shell command to execute')
+    add_install_parser.add_argument('shell_command', help='Shell command to execute')
     
     # Add Docker install command
     add_docker_parser = subparsers.add_parser('add-docker', help='Add a Docker library installation task')
     add_docker_parser.add_argument('container', help='Docker container name')
-    add_docker_parser.add_argument('command', help='Command to execute in container')
+    add_docker_parser.add_argument('shell_command', help='Command to execute in container')
     
     # Run command
     run_parser = subparsers.add_parser('run', help='Start the download manager')
@@ -115,20 +115,20 @@ Examples:
         print(f"  URL: {args.url}")
         
     elif args.command == 'add-install':
-        payload = {'command': args.command}
+        payload = {'command': args.shell_command}
         task_id = manager.add_task(TaskType.LIBRARY_INSTALL.value, payload)
         print(f"✓ Added library installation task: {task_id}")
-        print(f"  Command: {args.command}")
+        print(f"  Command: {args.shell_command}")
         
     elif args.command == 'add-docker':
         payload = {
             'container_name': args.container,
-            'command': args.command
+            'command': args.shell_command
         }
         task_id = manager.add_task(TaskType.LIBRARY_INSTALL.value, payload)
         print(f"✓ Added Docker library installation task: {task_id}")
         print(f"  Container: {args.container}")
-        print(f"  Command: {args.command}")
+        print(f"  Command: {args.shell_command}")
         
     elif args.command == 'run':
         print("Starting NightShift-lDownloader...")

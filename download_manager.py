@@ -274,7 +274,11 @@ class DownloadManager:
                     ydl_opts['cookiefile'] = cookie_file
                 else:
                     # Try to extract cookies from browser
-                    ydl_opts['cookiesfrombrowser'] = ('chrome',)
+                    try:
+                        ydl_opts['cookiesfrombrowser'] = ('chrome',)
+                    except Exception as e:
+                        logger.warning(f"Failed to extract cookies from browser: {e}")
+                        logger.warning("Consider providing a cookie file with --cookie-file option")
             
             # Progress hook to check time window
             def progress_hook(d):
@@ -320,10 +324,15 @@ class DownloadManager:
             
         Returns:
             True if command executed successfully, False otherwise
+        
+        Note:
+            This function uses shell=True which can be a security risk.
+            Only use with trusted command inputs.
         """
         try:
             command = task["payload"].get("command")
             logger.info(f"Executing command: {command}")
+            logger.warning("Executing shell command with shell=True - ensure command is from trusted source")
             
             # Check time window before execution
             if not self.is_within_window():
@@ -349,21 +358,33 @@ class DownloadManager:
             logger.error(f"Error executing command: {e}")
             return False
     
-    def execute_in_docker(self, container_name: str, command: str) -> bool:
+    def execute_in_docker(self, container_name: str, command: str, user: str = "0") -> bool:
         """
         Execute a command inside a Docker container
         
         Args:
             container_name: Name of the Docker container
             command: Command to execute inside the container
+            user: User to run as (default: "0" for root). Change this for better security.
             
         Returns:
             True if command executed successfully, False otherwise
+            
+        Note:
+            Running as root (user="0") is a security risk. Consider using a non-root user.
+            This function uses shell=True which can be a security risk.
+            Only use with trusted inputs.
         """
         try:
-            # Build docker exec command
-            docker_command = f"docker exec -u 0 {container_name} {command}"
-            logger.info(f"Executing in Docker: {docker_command}")
+            import shlex
+            
+            # Sanitize inputs to prevent command injection
+            # Build command using list instead of string interpolation
+            docker_cmd = ['docker', 'exec', '-u', user, container_name, 'sh', '-c', command]
+            
+            logger.info(f"Executing in Docker container '{container_name}': {command}")
+            if user == "0":
+                logger.warning("Running Docker command as root (user 0) - consider using non-root user for security")
             
             # Check time window before execution
             if not self.is_within_window():
@@ -371,8 +392,7 @@ class DownloadManager:
                 return False
             
             result = subprocess.run(
-                docker_command,
-                shell=True,
+                docker_cmd,
                 capture_output=True,
                 text=True,
                 timeout=3600  # 1 hour timeout
