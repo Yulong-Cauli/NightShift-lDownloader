@@ -15,7 +15,7 @@ A time-window based intelligent download manager optimized for nighttime downloa
 
 ## 安装 (Installation)
 
-### 方式 1: 使用 pip 安装 (Option 1: Install with pip)
+### ⭐ 推荐方式: 使用 pip 安装 (Recommended: Install with pip)
 
 ```bash
 git clone https://github.com/Yulong-Cauli/NightShift-lDownloader.git
@@ -29,24 +29,42 @@ After installation, you can use the `nightshift` command:
 
 ```bash
 nightshift --help
+nightshift list
+nightshift tui  # 启动交互式界面 (Launch interactive interface)
 ```
 
 ### 方式 2: 手动安装依赖 (Option 2: Manual installation)
 
-### 1. 克隆仓库 (Clone the repository)
+如果不使用 pip 安装，请注意需要使用 `python3 cli.py` 而不是 `nightshift` 命令。
+
+If not installing with pip, note that you need to use `python3 cli.py` instead of the `nightshift` command.
+
+#### 1. 克隆仓库 (Clone the repository)
 
 ```bash
 git clone https://github.com/Yulong-Cauli/NightShift-lDownloader.git
 cd NightShift-lDownloader
 ```
 
-### 2. 安装依赖 (Install dependencies)
+#### 2. 安装依赖 (Install dependencies)
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. (可选) Telegram 配置 (Optional: Telegram Configuration)
+#### 3. 使用方式 (Usage)
+
+手动安装后，使用 `python3 cli.py` 替代 `nightshift` 命令：
+
+After manual installation, use `python3 cli.py` instead of the `nightshift` command:
+
+```bash
+python3 cli.py --help
+python3 cli.py list
+python3 cli.py tui  # 启动交互式界面 (Launch interactive interface)
+```
+
+### (可选) Telegram 配置 (Optional: Telegram Configuration)
 
 如果需要下载 Telegram 视频，需要获取 API 凭据：
 
@@ -62,7 +80,55 @@ export TELEGRAM_API_HASH="your_api_hash"
 export TELEGRAM_PHONE="+1234567890"
 ```
 
+## 快速开始 (Quick Start)
+
+### 1️⃣ 安装软件 (Install)
+
+```bash
+git clone https://github.com/Yulong-Cauli/NightShift-lDownloader.git
+cd NightShift-lDownloader
+pip install -e .
+```
+
+### 2️⃣ 启动交互式界面 (Launch Interactive Interface)
+
+```bash
+nightshift tui
+```
+
+交互式界面可以让你：
+- 📋 查看所有下载任务
+- ➕ 添加新任务（视频、Telegram、命令）
+- 🗑️ 删除任务
+- 🔍 查看任务详情
+- ⏰ 检查时间窗口状态
+
+The interactive interface allows you to:
+- 📋 View all download tasks
+- ➕ Add new tasks (videos, Telegram, commands)
+- 🗑️ Delete tasks
+- 🔍 View task details
+- ⏰ Check time window status
+
+### 3️⃣ 启动下载管理器 (Start Download Manager)
+
+```bash
+nightshift run
+```
+
 ## 使用方法 (Usage)
+
+### 🖥️ 交互式终端界面 (Interactive Terminal Interface)
+
+**推荐使用交互式界面！** (Recommended to use interactive interface!)
+
+```bash
+nightshift tui
+```
+
+在交互式界面中，你可以通过菜单轻松管理所有任务，无需记忆命令行参数。
+
+In the interactive interface, you can easily manage all tasks through menus without memorizing command-line arguments.
 
 ### 命令行界面 (Command Line Interface)
 
@@ -313,6 +379,43 @@ def on_task_complete(task_id):
 
 ## 故障排查 (Troubleshooting)
 
+### `nightshift` 命令不可用
+
+**问题**: 执行 `nightshift list` 时提示命令未找到
+
+**解决方案**:
+
+1. **确认已使用 pip 安装**:
+   ```bash
+   pip install -e .
+   ```
+   
+2. **如果是手动安装（方式2）**, 使用 `python3 cli.py` 替代 `nightshift`:
+   ```bash
+   python3 cli.py list
+   python3 cli.py tui
+   ```
+
+3. **检查 pip 安装路径**: 确保 pip 的 bin 目录在 PATH 中:
+   ```bash
+   which nightshift
+   # 如果没有输出，检查 pip 安装位置
+   pip show nightshift-ldownloader
+   ```
+
+### 无法找到 tasks.json
+
+**问题**: 提示 "No tasks found" 或无法读取任务文件
+
+**解决方案**:
+
+1. 确认当前目录或指定正确的任务文件路径:
+   ```bash
+   nightshift --tasks-file /path/to/tasks.json list
+   ```
+
+2. 首次使用时，文件会自动创建，这是正常的
+
 ### Telethon 相关错误
 
 如果遇到 Telegram 登录问题：
@@ -332,6 +435,14 @@ def on_task_complete(task_id):
 1. 确保 Docker 容器正在运行
 2. 确保有足够的权限执行 `docker exec`
 3. 检查容器名称是否正确
+
+### 交互式界面显示异常
+
+如果 TUI 界面显示有问题：
+
+1. 确保终端支持 UTF-8 编码
+2. 调整终端窗口大小
+3. 尝试使用不同的终端模拟器
 
 ## 依赖项 (Dependencies)
 

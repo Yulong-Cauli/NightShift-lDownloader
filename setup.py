@@ -18,7 +18,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Yulong-Cauli/NightShift-lDownloader",
-    py_modules=["download_manager", "cli"],
+    py_modules=["download_manager", "cli", "tui"],
     python_requires=">=3.7",
     install_requires=requirements,
     entry_points={

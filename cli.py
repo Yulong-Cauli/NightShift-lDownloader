@@ -26,6 +26,9 @@ Examples:
   # Add a Docker library installation task
   %(prog)s add-docker my_container "pip install torch"
   
+  # Launch interactive task management interface
+  %(prog)s tui
+  
   # Start the download manager
   %(prog)s run
   
@@ -80,6 +83,9 @@ Examples:
     
     # List command
     subparsers.add_parser('list', help='List all tasks')
+    
+    # TUI command
+    tui_parser = subparsers.add_parser('tui', help='Launch interactive task management interface')
     
     args = parser.parse_args()
     
@@ -177,6 +183,21 @@ Examples:
             
             if task.get('progress'):
                 print(f"   Progress: {task['progress']}")
+    
+    elif args.command == 'tui':
+        # Launch the TUI interface
+        try:
+            from tui import SimpleTUI
+            tui = SimpleTUI(
+                tasks_file=args.tasks_file,
+                download_dir=args.download_dir
+            )
+            tui.run()
+        except KeyboardInterrupt:
+            print("\n\n👋 Goodbye!")
+        except ImportError as e:
+            print(f"Error: Could not load TUI module: {e}")
+            return 1
     
     return 0
 
