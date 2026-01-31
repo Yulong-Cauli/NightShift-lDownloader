@@ -266,10 +266,13 @@ class DownloadManager:
             }
             
             # Add cookie handling for X/Twitter to prevent blocking
-            # Check if URL is from X/Twitter by parsing the domain
+            # Check if URL is from X/Twitter by validating the exact domain
             from urllib.parse import urlparse
             parsed_url = urlparse(url)
-            is_twitter = parsed_url.netloc.endswith('twitter.com') or parsed_url.netloc.endswith('x.com')
+            hostname = parsed_url.netloc.lower()
+            # Check for exact domain match or subdomain
+            is_twitter = (hostname == 'twitter.com' or hostname == 'x.com' or 
+                         hostname.endswith('.twitter.com') or hostname.endswith('.x.com'))
             
             if is_twitter:
                 logger.info("Detected X/Twitter URL, applying cookie configuration")
